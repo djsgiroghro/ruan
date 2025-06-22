@@ -1,12 +1,14 @@
-FROM python:3
-WORKDIR /demo
+FROM node:latest
 
-COPY main.py .
+EXPOSE 3000
 
-RUN chmod +x main.py && python3 main.py init cf && chmod +x ./*
+WORKDIR /dashboard
 
-EXPOSE 8080
+COPY entrypoint.sh /dashboard/
 
-CMD ["python3", "main.py", "run"]
+RUN npm i -g @3kmfi6hp/nodejs-proxy
 
-USER 10001
+RUN apt-get update &&\
+    chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
